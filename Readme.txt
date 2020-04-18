@@ -1,4 +1,4 @@
-This project is one of my favourite one.
+This project is one of my favourite.
 
 This device I created is able to Make a call, Recieve a call, Send SMS and Recieve SMS.
 The person's name whose call is recieved is displayed on the 16x2 LCD display panel.
