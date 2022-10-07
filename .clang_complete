@@ -1,6 +1,6 @@
 -I/home/chima/Documents/Projects/codeProjects/GitHub/Arduino_Mobile_Phone/include
 -I/home/chima/Documents/Projects/codeProjects/GitHub/Arduino_Mobile_Phone/src
--I/home/chima/Documents/Projects/codeProjects/GitHub/Arduino_Mobile_Phone/lib/src
+-I/home/chima/Documents/Projects/codeProjects/GitHub/Arduino_Mobile_Phone/lib/phone/src
 -I/home/chima/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src
 -I/home/chima/.platformio/lib/LCD
 -I/home/chima/.platformio/lib/LCD/utility
@@ -25,7 +25,7 @@
 -I/home/chima/.platformio/lib/k2
 -I/home/chima/.platformio/lib/libb
 -I/home/chima/.platformio/lib/morseCode/src
--I/home/chima/.platformio/lib/phone/src
+-I/home/chima/.platformio/lib/phone
 -I/home/chima/.platformio/lib/pincontrol/src
 -I/home/chima/.platformio/lib/sensors/src
 -I/home/chima/.platformio/lib/serLib

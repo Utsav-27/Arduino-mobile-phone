@@ -1,3 +1,10 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//*******FILE NAME:   phone.cpp*********************************************************************
+//*******AUTHOR:      Chima Okwara (AlphaChi)*******************************************************
+//*******DESC:        Library for Arduino Phone ****************************************************
+//*******LICENCE:     GPL Version 3 ****************************************************************
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #include <Arduino.h>
 #include "phone.hpp"
 
@@ -10,10 +17,19 @@ Phone::Phone(PhoneData &data)
 
 }
 
-extern "C"
+Phone::~Phone()
 {
-  bool Phone::init()
-  {
+  delete lcd;
+  delete gsm;
+  delete keypad;
+  lcd = nullptr;
+  gsm = nullptr;
+  keypad = nullptr;
+}
+
+bool Phone::init()
+{
+    using namespace phn;
     gsm->begin(9600);
     lcd->begin(16,2);
     lcd->createChar(1, back);
@@ -30,7 +46,7 @@ extern "C"
     lcd->print("Connecting");
     delay(500);
     lcd->setCursor(0, 1);
-    for(i = 0; i < 3; ++i)
+    for(phn::i = 0; phn::i < 3; ++phn::i)
     {
       lcd->print(".");
       delay(500);
@@ -92,29 +108,29 @@ extern "C"
     delay(2000);
     return 1;
  }
-}
 
 void Phone::serialEvent()
 {
+  using namespace phn;
   while(gsm->available())
   {
     char ch = gsm->read();
-    instr += ch;
-    i++;
+    phn::instr += ch;
+    phn::i++;
 
-    if(instr[i-4] == 'R' && instr[i-3] == 'I' && instr[i-2] == 'N' && instr[i-1] == 'G' )
+    if(phn::instr[i-4] == 'R' && phn::instr[i-3] == 'I' && phn::instr[i-2] == 'N' && phn::instr[i-1] == 'G' )
     {
-       ring = 1;
+       phn::ring = 1;
     }
 
-    if(instr.indexOf("NO CARRIER") >= 0)
+    if(phn::instr.indexOf("NO CARRIER") >= 0)
     {
-       ring = 0;
-       i = 0;
+       phn::ring = 0;
+       phn::i = 0;
     }
-    if(instr.indexOf("+CMTI: \"SM\"") >= 0)
+    if(phn::instr.indexOf("+CMTI: \"SM\"") >= 0)
     {
-      smsFlag=1;
+      phn::smsFlag=1;
     }
   }
 }
@@ -155,12 +171,12 @@ void Phone::sms()
       }
     }
     lcd->clear();
-    lcd->print("After Enter MSG ");
+    lcd->print("After typing phn::msg");
     lcd->setCursor(0,1);
     lcd->print("Press D to Send ");
     delay(2000);
     lcd->clear();
-    lcd->print("Enter Your Msg");
+    lcd->print("Enter Your phn::msg");
     delay(1000);
     lcd->clear();
     lcd->setCursor(0,0);
@@ -171,7 +187,7 @@ void Phone::sms()
 void Phone::call()
 {
 
-    number="";
+    phn::number="";
     lcd->clear();
     lcd->print("After Enter No.");
     lcd->setCursor(0,1);
@@ -191,11 +207,10 @@ void Phone::call()
           lcd->clear();
           lcd->print("Calling........");
           lcd->setCursor(0,1);
-          lcd->print(number);
+          lcd->print(phn::number);
           gsm->print("ATD");
-          gsm->print(number);
+          gsm->print(phn::number);
           gsm->println(";");
-          long stime = millis()+5000;
           int ans=1;
           while(ans==1)
           {
@@ -205,15 +220,14 @@ void Phone::call()
               {
                 lcd->clear();
                 lcd->print("Ringing....");
-                int l = 0;
-                str1=" ";
+                phn::str1=" ";
                 while(ans==1)
                 {
                   while(gsm->available()>0)
                   {
                     char ch=gsm->read();
-                    str1+=ch;
-                    if(str1.indexOf("NO CARRIER")>0)
+                    phn::str1+=ch;
+                    if(phn::str1.indexOf("NO CARRIER")>0)
                     {
                       lcd->clear();
                       lcd->print("Call End");
@@ -240,7 +254,7 @@ void Phone::call()
         }
         else
         {
-          number+=key;
+          phn::number+=key;
           lcd->print(key);
         }
       }
@@ -285,7 +299,7 @@ void Phone::alphaNumericKeyboard()
              y++;
              y%=2;
            }
-           msg+=characters[num];
+           phn::msg+=characters[num];
           }
 
          else if(key=='2')
@@ -315,7 +329,7 @@ void Phone::alphaNumericKeyboard()
              y++;
              y%=2;
            }
-           msg+=characters[num];
+           phn::msg+=characters[num];
           }
 
          else if(key=='3')
@@ -345,7 +359,7 @@ void Phone::alphaNumericKeyboard()
              y++;
              y%=2;
            }
-           msg+=characters[num];
+           phn::msg+=characters[num];
           }
 
          else if(key=='4')
@@ -375,7 +389,7 @@ void Phone::alphaNumericKeyboard()
              y++;
              y%=2;
            }
-           msg+=characters[num];
+           phn::msg+=characters[num];
           }
 
                 else if(key=='5')
@@ -405,7 +419,7 @@ void Phone::alphaNumericKeyboard()
              y++;
              y%=2;
            }
-           msg+=characters[num];
+           phn::msg+=characters[num];
           }
 
           else if(key=='6')
@@ -435,7 +449,7 @@ void Phone::alphaNumericKeyboard()
              y++;
              y%=2;
            }
-           msg+=characters[num];
+           phn::msg+=characters[num];
           }
 
          else if(key=='7')
@@ -465,7 +479,7 @@ void Phone::alphaNumericKeyboard()
              y++;
              y%=2;
            }
-           msg+=characters[num];
+           phn::msg+=characters[num];
           }
 
          else if(key=='8')
@@ -495,7 +509,7 @@ void Phone::alphaNumericKeyboard()
              y++;
              y%=2;
            }
-           msg+=characters[num];
+           phn::msg+=characters[num];
           }
 
          else if(key=='9')
@@ -525,7 +539,7 @@ void Phone::alphaNumericKeyboard()
              y++;
              y%=2;
            }
-           msg+=characters[num];
+           phn::msg+=characters[num];
           }
 
           else if(key=='0')
@@ -555,7 +569,7 @@ void Phone::alphaNumericKeyboard()
              y++;
              y%=2;
            }
-           msg+=characters[num];
+           phn::msg+=characters[num];
           }
 
           else if(key=='D')
@@ -565,15 +579,15 @@ void Phone::alphaNumericKeyboard()
            // gsm->print("AT+CMGS=");
            // gsm->print(number);
            // delay(2000);
-            gsm->print(msg);
+            gsm->print(phn::msg);
             gsm->write(26);
             delay(5000);
             lcd->clear();
             lcd->print("SMS Sent to");
             lcd->setCursor(0,1);
-            lcd->print(number);
+            lcd->print(phn::number);
             delay(2000);
-            number="";
+            phn::number="";
             break;
           }
         }
@@ -583,7 +597,7 @@ void Phone::alphaNumericKeyboard()
 
 inline void Phone::sendData(String msg)
 {
-    gsm->println(msg);
+    gsm->println(phn::msg);
     delay(200);
 }
 

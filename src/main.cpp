@@ -1,5 +1,11 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//*******FILE NAME:   main.cpp**********************************************************************
+//*******AUTHOR:      Chima Okwara (AlphaChi)*******************************************************
+//*******DESC:        Main program  for Arduino Phone **********************************************
+//*******LICENCE:     GPL Version 3 ****************************************************************
+////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <Arduino.h>
-#include <../lib/src/phone.hpp>
+#include <phone.hpp>
 
 void setup(void);
 void loop(void);
@@ -40,51 +46,51 @@ void setup()
 
 void loop()
 {
+  using namespace phn;
   myPhone->serialEvent();
-  if(Phone::smsFlag == 1)
+  if(smsFlag == 1)
   {
-
       myPhone->cls();
       myPhone->print("New Message");
-      int ind = myPhone->instr.indexOf("+CMTI: \"SM\",");
+      int ind = instr.indexOf("+CMTI: \"SM\",");
       ind += 12;
       int k = 0;
       myPhone->setCursor(0,1);
       myPhone->print(ind);
       while(1)
       {
-        while(myPhone->instr[ind]!= 0x0D)
+        while(instr[ind]!= 0x0D)
         {
-          myPhone->smsNum[k++]=myPhone->instr[ind++];
+          smsNum[k++]=instr[ind++];
         }
         break;
       }
       ind=0;
-      Phone::smsFlag=0;
+      smsFlag=0;
       myPhone->setCursor(0,1);
       myPhone->print("Read SMS --> D");
       delay(4000);
-      Phone::instr="";
-      Phone::recRead=1;
-      Phone::temp1=1;
-      Phone::i=0;
+      instr="";
+      recRead=1;
+      temp1=1;
+      i=0;
   }
 
-  if(Phone::ring == 1)
+  if(ring == 1)
   {
 
-      Phone::number="";
-      int loc=Phone::instr.indexOf("+CLIP: \"");
+      number="";
+      int loc=instr.indexOf("+CLIP: \"");
       if(loc > 0)
       {
-        Phone::number+=Phone::instr.substring(loc+8,loc+13+8);
+        number+=instr.substring(loc+8,loc+13+8);
       }
       myPhone->setCursor(0,0);
       myPhone->print("Incomming...    ");
       myPhone->setCursor(0,1);
-      myPhone->print(Phone::number);
-      Phone::instr="";
-      Phone::i=0;
+      myPhone->print(number);
+      instr="";
+      i=0;
 
   }
 
@@ -97,7 +103,7 @@ void loop()
     myPhone->setCursor(0,1);
     myPhone->print("SMS  --> B   ");
 
-    if(Phone::recRead==1)
+    if(recRead==1)
     {
       myPhone->write(1);
       myPhone->print("   ");
@@ -112,7 +118,7 @@ void loop()
 
       if(key== 'A')
       {
-        if(Phone::ring==1)
+        if(ring==1)
         {
         myPhone->gsmPrintln("ATA");
         delay(5000);
@@ -128,31 +134,31 @@ void loop()
         myPhone->sms();
       }
 
-      else if(key == 'D'  && Phone::temp1==1)
+      else if(key == 'D'  && temp1==1)
       {
-        Phone::recRead=0;
+        recRead=0;
         myPhone->cls();
         myPhone->print("Please wait...");
         myPhone->gsmPrint("AT+CMGR=");
-        myPhone->gsmPrintln(Phone::smsNum);
+        myPhone->gsmPrintln(smsNum);
         int sms_read_flag=1;
-        Phone::strSms="";
+        strSms="";
         while(sms_read_flag)
         {
           while(myPhone->gsmAvail()>0)
           {
             char ch=myPhone->gsmRead();
-            Phone::strSms+=ch;
-            if(Phone::strSms.indexOf("OK")>0)
+            strSms+=ch;
+            if(strSms.indexOf("OK")>0)
             {
               sms_read_flag=0;
               //break;
             }
           }
         }
-        int l1=Phone::strSms.indexOf("\"\r\n");
-        int l2=Phone::strSms.indexOf("OK");
-        String sms =Phone::strSms.substring(l1+3,l2-4);
+        int l1=strSms.indexOf("\"\r\n");
+        int l2=strSms.indexOf("OK");
+        String sms =strSms.substring(l1+3,l2-4);
         myPhone->cls();
         myPhone->print(sms);
         delay(5000);

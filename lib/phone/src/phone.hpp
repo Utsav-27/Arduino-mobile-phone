@@ -1,3 +1,9 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//*******FILE NAME:   phone.hpp*********************************************************************
+//*******AUTHOR:      Chima Okwara (AlphaChi)*******************************************************
+//*******DESC:        Library for Arduino Phone ****************************************************
+//*******LICENCE:     GPL Version 3 ****************************************************************
+////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifndef ____ARDUINO____PHONE____
 #define ____ARDUINO____PHONE____
 #define ROWS 4U
@@ -22,22 +28,27 @@ struct PhoneData
   char *keys[ROWS] [COLUMNS];
 };
 
+namespace phn
+{
+  static uint8_t smsFlag;
+  static uint8_t  ring, i, temp, temp1,  recRead;
+  static char smsNum[3];
+  static String number, msg, instr, strSms, str1;
+}
 
 class Phone
 {
 public:
   //Member Attribtes:
-  static uint8_t smsFlag;
-  static uint8_t
-   ring,
-  i, temp, temp1,  recRead;
-  static char smsNum[3];
-  static String number, msg, instr, strSms, str1;
+
+  //Constructors:
+  Phone () = default;
+  explicit Phone (PhoneData&);
+  ~Phone();
+
 
   //Member Methods:
-  Phone () = default;
   bool init();
-  explicit Phone (PhoneData&);
   void serialEvent();
   void sms();
   void call();
