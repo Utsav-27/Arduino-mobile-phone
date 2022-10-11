@@ -1,4 +1,5 @@
 .pio
 .vscode
 .gcc-flags*
-*gitignore
+.gitignore
+.clang*
