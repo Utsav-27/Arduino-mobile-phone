@@ -38,7 +38,7 @@ bool Phone::init()
     delay(1000);
     lcd->clear();
     lcd->setCursor(0, 0);
-    lcd->print("   ArduPhone 1.0   ");
+    lcd->print("  unofone 1.0   ");
     delay(1000);
     lcd->clear();
 

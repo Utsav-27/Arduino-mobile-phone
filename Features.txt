@@ -1,5 +1,0 @@
-FEATURE         KEYPAD BUTTON
-Receive Call        A
-Send SMS            B
-Make Call           C
-Read SMS            D
