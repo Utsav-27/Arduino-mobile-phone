@@ -67,7 +67,7 @@ bool Phone::init()
     }
 
     lcd->clear();
-    lcd->print("Module Connected..");
+    lcd->print("Connected..");
     delay(1000);
     lcd->clear();
     lcd->print("Disabling ECHO");
