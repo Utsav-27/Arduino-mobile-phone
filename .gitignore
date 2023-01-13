@@ -1,0 +1,5 @@
+.pio
+.vscode
+.gcc-flags*
+.gitignore
+.clang*
